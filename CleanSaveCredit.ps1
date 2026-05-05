@@ -6,6 +6,15 @@
  .\CleanSaveCredit.ps1
  "Input the name of the resource group you want to delete (e.g., Lab-az104)"
 #>
+$Groups = Get-AzResourceGroup
+
+
+if (-not ($Groups)) {
+    Write-Host "No Azure context found. Please log in using Connect-AzAccount or there is no active groups." -ForegroundColor Red
+    exit
+}
+
+Get-AzResourceGroup | Select-Object -ExpandProperty ResourceGroupName
 
 Write-Host "Input the name of the resource group you want to delete (e.g., Lab-az104)"
 $TargetRG = Read-Host
