@@ -5,6 +5,12 @@
     It uses a Try/Catch block to handle errors and runs the deletion as a background job.
 #>
 
+# Ensure the script logs in using the Managed Identity
+Connect-AzAccount -Identity
+
+# Set the context to your subscription (important if you have multiple)
+Set-AzContext -Subscription "Azure subscription 1"
+
 # 1. Set the preference to stop on all errors so 'catch' can see them
 $ErrorActionPreference = "Stop"
 
