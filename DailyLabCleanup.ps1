@@ -1,23 +1,30 @@
 <#.Synopsis
- Deletes all ResourceGroups named Lab-*
+    Deletes all ResourceGroups named Lab-*
 .Description
-    This script retrieves all Azure Resource Groups with names that start with "Lab-" and deletes them. It checks for an active Azure context and ensures that there are matching resource groups before attempting deletion. 
-    The deletion is performed as a background job to allow for asynchronous processing.
- .EXAMPLE
-    .\DailyLabCleanup.ps1
+    This script retrieves all Azure Resource Groups with names that start with "Lab-" and deletes them. 
+    It uses a Try/Catch block to handle errors and runs the deletion as a background job.
 #>
+
+# 1. Set the preference to stop on all errors so 'catch' can see them
+$ErrorActionPreference = "Stop"
+
 $Groups = Get-AzResourceGroup | Where-Object { $_.ResourceGroupName -like "Lab-*" }
 
-
+# 2. Check if there are any resource groups to delete
 if (-not ($Groups)) {
-    Write-Host "No Azure context found. Please log in using Connect-AzAccount or there are no active groups." -ForegroundColor Red
+    Write-Output "No resource groups found with the name pattern 'Lab-*'."
     return
 }
 
-
-if ($Groups.Count -eq 0) {
-    Write-Host "No resource groups found with the name pattern 'Lab-*'." -ForegroundColor Yellow
-    return
+# 3. Loop through each group with proper Error Handling
+foreach ($Group in $Groups) {
+    try {
+        Write-Output "Attempting to start deletion for: $($Group.ResourceGroupName)"
+        Remove-AzResourceGroup -Name $Group.ResourceGroupName -Force -AsJob
+    }
+    catch {
+        # This handles issues like permissions or connectivity per group
+        $msg = $_.Exception.Message
+        Write-Error "Failed to start job for $($Group.ResourceGroupName): $msg"
+    }
 }
-
-Remove-AzResourceGroup -Name $Groups.ResourceGroupName -Force -AsJob
