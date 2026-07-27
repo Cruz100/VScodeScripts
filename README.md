@@ -32,3 +32,10 @@ Automates ticket creation and reduces manual administrative work.
 
 ### PracticeCode.ps1
 Sandbox script used to test and learn new PowerShell concepts.
+
+## Technologies
+- PowerShell
+- Microsoft Azure
+- Azure Automation Accounts
+- Windows Task Scheduler
+- Windows Administration
