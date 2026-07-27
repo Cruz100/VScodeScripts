@@ -1,4 +1,4 @@
-A collection of PowerShell scripts developed for system administration,4automation, cloud labs, and personal productivity.
+A collection of PowerShell scripts developed for system administration,automation, cloud labs, and personal productivity.
 
 #Scripts
 
